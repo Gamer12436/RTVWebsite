@@ -13,6 +13,32 @@
             padding: 0;
             background-color: #121212;
             color: white;
+            scroll-behavior: smooth; /* Smooth scrolling */
+        }
+
+        /* Navigation styles */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav a {
+            color: #00ff66;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #00e65a;
         }
 
         /* Section styles */
@@ -26,6 +52,14 @@
             position: relative;
             overflow: hidden;
             color: white;
+            opacity: 0; /* Hidden for animation */
+            transform: translateY(50px); /* Animation start position */
+            transition: opacity 0.5s, transform 0.5s; /* Smooth transitions */
+        }
+
+        .section.visible {
+            opacity: 1; /* Visible after scroll */
+            transform: translateY(0); /* Reset position */
         }
 
         /* Overlay styling */
@@ -58,16 +92,17 @@
             font-size: 20px;
             font-weight: 700;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .cta:hover {
             background-color: #00e65a;
+            transform: scale(1.05); /* Slightly increase size */
         }
 
         /* Background images */
         #thumbnail-section {
-            background-image: url('/mnt/data/A_high-energy_Fortnite_thumbnail_featuring_vibrant.png');
+            background-image: url('https://i.postimg.cc/1f6d72wb/A-high-energy-Fortnite-thumbnail-featuring-vibrant-1.webp');
             background-size: cover;
             background-position: center;
         }
@@ -82,9 +117,53 @@
         #final-section {
             background-color: #000;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+
+    <nav>
+        <a href="#thumbnail-section">Home</a>
+        <a href="#info-section">About</a>
+        <a href="#final-section" id="discordLinkBtn">Join Discord</a>
+    </nav>
 
     <!-- First Section with Fortnite Thumbnail -->
     <section class="section" id="thumbnail-section">
@@ -108,9 +187,57 @@
         <div class="overlay-text">
             <h1>Join Us on Discord</h1>
             <p>Connect with like-minded players, participate in scrims, and take your Fortnite skills to the next level. Join RTV Scrims today!</p>
-            <a href="https://discord.gg/XQgdY52Eg3" class="cta">Join the Server</a>
+            <button class="cta" id="discordLinkBtn">Join the Server</button>
         </div>
     </section>
+
+    <!-- Modal for Discord Link -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Join RTV Scrims on Discord</h2>
+            <p>Click the button below to join:</p>
+            <a href="https://discord.gg/YOURDISCORDLINK" class="cta">Join Discord</a>
+        </div>
+    </div>
+
+    <script>
+        // Show/hide sections on scroll
+        const sections = document.querySelectorAll('.section');
+        const options = {
+            threshold: 0.2 // Trigger when 20% of the section is visible
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, options);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Modal functionality
+        const modal = document.getElementById("myModal");
+        const btn = document.getElementById("discordLinkBtn");
+        const span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>
